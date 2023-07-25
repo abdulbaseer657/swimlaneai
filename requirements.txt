@@ -1,6 +1,7 @@
 Flask
 flask[async]
 langchain
+tiktoken
 llama_index
 markupsafe
-jinja2
+
