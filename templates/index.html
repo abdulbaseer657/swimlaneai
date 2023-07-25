@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Connector-Action</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f1f1f1;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #loadingContainer {
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        #responseContainer {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+            white-space: pre-wrap;
+            max-width: 500px;
+            margin: 0 auto;
+            display: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Get Response</h1>
+    <form id="userInputForm">
+        <label for="userInput">Enter your action requirment :</label>
+        <input type="text" id="userInput" name="userInput" required placeholder="e.g., Get alert from Splunk">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="loadingContainer">Loading...</div>
+    <div id="responseContainer"></div>
+
+    <script>
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const userInput = document.getElementById("userInput").value;
+
+            // Show the loading indicator and hide the response container
+            const loadingContainer = document.getElementById("loadingContainer");
+            const responseContainer = document.getElementById("responseContainer");
+            loadingContainer.style.display = "block";
+            responseContainer.style.display = "none";
+
+            try {
+                const response = await fetch('/get_response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_input: userInput })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not OK');
+                }
+
+                const data = await response.json();
+
+                // Convert the JSON data to a readable format using JSON.stringify with indentation
+                const formattedData = JSON.stringify(data, null, 2);
+
+                // Wrap the formatted data in the <pre> tag for better readability
+                responseContainer.innerHTML = `${formattedData}`;
+
+                // Show the response container and hide the loading indicator
+                responseContainer.style.display = "block";
+                loadingContainer.style.display = "none";
+            } catch (error) {
+                console.error('Error:', error);
+                const responseContainer = document.getElementById("responseContainer");
+                responseContainer.innerHTML = `<pre>Error: ${error.message}</pre>`;
+
+                // Show the response container and hide the loading indicator
+                responseContainer.style.display = "block";
+                loadingContainer.style.display = "none";
+            }
+        }
+
+        document.getElementById("userInputForm").addEventListener("submit", handleSubmit);
+    </script>
+</body>
+</html>
