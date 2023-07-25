@@ -106,8 +106,11 @@
 
                 const data = await response.json();
 
+                // Convert the JSON data to a readable format using JSON.stringify with indentation
+                //const formattedData = JSON.stringify(data, null, 2);
+
                 // Wrap the formatted data in the <pre> tag for better readability
-                responseContainer.innerHTML = <pre>${data}</pre>`;
+                responseContainer.innerHTML = `<pre>${data}</pre>`;
 
                 // Show the response container and hide the loading indicator
                 responseContainer.style.display = "block";
