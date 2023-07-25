@@ -9,7 +9,7 @@ app = Flask(__name__)
 openai_api_key=os.getenv("API")
 
 # Set up OpenAI
-llm = OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=-1, openai_api_key=openai_api_key)
+llm = OpenAI(temperature=0, model_name="text-davinci-003", max_tokens=-1, openai_api_key=os.getenv("API"))
 
 # Set up the service context
 service_context = ServiceContext.from_defaults(llm=llm)
