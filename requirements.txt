@@ -1,5 +1,5 @@
 Flask
-flask'[async]'
+flask[async]
 langchain
 llama_index
 
