@@ -3,4 +3,4 @@ flask[async]
 langchain
 llama_index
 markupsafe
-
+jinja2
